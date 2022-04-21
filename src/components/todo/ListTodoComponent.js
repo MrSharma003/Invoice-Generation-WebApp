@@ -1,23 +1,20 @@
 import React, {Component} from 'react';
 import ToDodataService from "../../api/todo/ToDodataService";
 import AuthenticationService from "./AuthenticationService";
-import moment from 'moment'
+import moment from 'moment';
 import {resetFirstInputPolyfill} from "web-vitals/dist/modules/lib/polyfills/firstInputPolyfill";
+import {useParams} from "react-router-dom";
 
 class ListTodoComponent extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            todos : [
-                // {id: 1, description: 'Learn React', done: false, targetdate: new Date()},
-                // {id: 2, description: 'How to Learn React', done: false, targetdate: new Date()},
-                // {id: 3, description: 'Learn React fast', done: false, targetdate: new Date()}
-            ],
+            todos : [],
             message: null
         }
-        this.deleteTodoClicled = this.deleteTodoClicled.bind(this);
-        this.updateTodoClicled = this.updateTodoClicled.bind(this);
+        this.deleteTodoClicked = this.deleteTodoClicked.bind(this);
+        this.updateTodoClicked = this.updateTodoClicked.bind(this);
         this.refreshTodos = this.refreshTodos.bind(this);
     }
 
@@ -38,9 +35,9 @@ class ListTodoComponent extends Component {
             )
     }
 
-    deleteTodoClicled(id){
+    deleteTodoClicked(id){
         let username = AuthenticationService.getLoggedInUsername()
-        console.log(id + " "+ username)
+        //console.log(id + " "+ username)
         ToDodataService.deleteToDo(username,id)
             .then(response => {
                 this.setState({message: `Delete of todo ${id} successful`});
@@ -48,14 +45,16 @@ class ListTodoComponent extends Component {
             })
     }
 
-    updateTodoClicled(id){
-        let username = AuthenticationService.getLoggedInUsername()
-        console.log(id + " "+ username)
-        ToDodataService.deleteToDo(username,id)
-            .then(response => {
-                this.setState({message: `Delete of todo ${id} successful`});
-                this.refreshTodos();
-            })
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log('shouldComponentUpdate')
+        console.log(nextProps)
+        console.log(nextState)
+        return true
+    }
+
+    updateTodoClicked(id){
+        //console.log('update' + id)
+        this.props.navigate(`/todos/${id}`);
     }
 
     render() {
@@ -84,8 +83,8 @@ class ListTodoComponent extends Component {
                                             <td>{todo.description}</td>
                                             <td>{moment(todo.targetdate).format('YYYY-MM-DD')}</td>
                                             <td>{todo.done.toString()}</td>
-                                            <td><button className="btn btn-success" onClick={() => this.updateTodoClicled(todo.id)}>Update</button></td>
-                                            <td><button className="btn btn-warning" onClick={() => this.deleteTodoClicled(todo.id)}>Delete</button></td>
+                                            <td><button className="btn btn-success" onClick={() => this.updateTodoClicked(todo.id)}>Update</button></td>
+                                            <td><button className="btn btn-warning" onClick={() => this.deleteTodoClicked(todo.id)}>Delete</button></td>
                                         </tr>
                                 )
                             }
