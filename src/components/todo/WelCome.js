@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import HelloWorldService from "../../api/todo/HelloWorldService";
-import {logDOM} from "@testing-library/react";
 class WelCome extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            welcomeMessage : ""
+        }
         this.retrieveWelcomeMessage = this.retrieveWelcomeMessage.bind(this)
         this.handleSuccessfulResponse = this.handleSuccessfulResponse.bind(this)
     }
@@ -22,20 +24,25 @@ class WelCome extends Component {
                     <button onClick={this.retrieveWelcomeMessage} className="btn btn-success">Get Welcome Message</button>
                 </div>
                 <div className="container">
-                    {this.state.welcomeMessage}
+                   <h1> Message:  {this.state.welcomeMessage}</h1>
                 </div>
             </>
         );
     }
 
     retrieveWelcomeMessage(){
-        // console.log('retrive click')
+        console.log('retrieve click')
         // HelloWorldService.executeHelloWorldService()
         //     .then(response => this.handleSuccessfulResponse(response)) //if succeed
         //     .catch() //if fails
 
-        HelloWorldService.executeHelloWorldBeanService()
+        // HelloWorldService.executeHelloWorldBeanService()
+        //     .then(response => this.handleSuccessfulResponse(response))
+        //     .catch()
+
+        HelloWorldService.executeHelloWorldPathVariableService(this.props.params.name)
             .then(response => this.handleSuccessfulResponse(response))
+            .catch()
     }
 
     handleSuccessfulResponse(response){
