@@ -12,14 +12,37 @@ class TodoComponent extends Component {
             description: 'Learn forms',
             targetdate: moment(new Date()).format('YYYY-MM-DD')
         }
+        this.handleOnSubmit = this.handleOnSubmit.bind(this)
+        this.checkValidation = this.checkValidation.bind(this)
+    }
+
+    handleOnSubmit(values){
+        console.log(values)
+    }
+
+    checkValidation(values){
+        let errors = {}
+        console.log(values)
+        return errors
     }
 
     render() {
+        // let description = this.state.description
+        // let targetdate = this.state.targetdate
         return (
             <div>
                 <h1>To DO</h1>
                 <div className="container">
-                   <Formik>
+                   <Formik
+                       initialValues={{
+                           //one parenthisis indicates javascripts and other indicates object
+                           //key:value
+                           description : this.state.description,
+                           targetdate: this.state.targetdate
+                       }}
+                       onSubmit={this.handleOnSubmit}
+                       validate={this.checkValidation}
+                   >
                        {
                            (props) => (
                                <Form>
