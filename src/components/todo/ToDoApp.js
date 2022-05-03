@@ -12,16 +12,19 @@ import LoginComponent from "./LoginComponent";
 import FooterComponent from "./FooterComponent";
 import LogoutComponent from "./LogoutComponent";
 import TodoComponent from "./TodoComponent";
+import SignupComponent from "./SignupComponent";
 
 class ToDoApp extends Component {
     render() {
         const LoginComponentWithNavigation = withNavigation(LoginComponent);
+        const SignupComponentWithNavigation = withNavigation(SignupComponent);
         const WelcomeWithparams = withParams(WelCome);
         const ErrorComponentWithNavigation = withNavigation(ErrorComponent);
         const ListTodoComponentWithNavigation = withNavigation(ListTodoComponent);
         const LogoutComponentWithNavigation = withNavigation(LogoutComponent);
         const HeaderComponentWithNavigation = withNavigation(HeaderComponent);
         const TodoComponentWithparams = withParams(TodoComponent);
+
 
         return (
             <div className="ToDoApp">
@@ -30,6 +33,7 @@ class ToDoApp extends Component {
                     <Routes>
                         <Route path="/" element={<LoginComponentWithNavigation/>}/>
                         <Route path="/login" element={<LoginComponentWithNavigation/>}/>
+                        <Route path="/signup" element={<SignupComponentWithNavigation/>}/>
                         <Route path="/welcome/:name" element={
                             <AuthenticatedRoute>
                                 <WelcomeWithparams/>
@@ -57,7 +61,7 @@ class ToDoApp extends Component {
                                 </AuthenticatedRoute>}/>
 
                     </Routes>
-                    <FooterComponent/>
+                    {/*<FooterComponent/>*/}
                 </Router>
                 {/*<LoginComponent/>*/}
                 {/*<WelCome/>*/}

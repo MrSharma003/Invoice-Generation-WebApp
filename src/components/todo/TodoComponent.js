@@ -1,8 +1,38 @@
 import React, {Component} from 'react';
-import moment from "moment";
-import {ErrorMessage, Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik, useField, useFormikContext} from "formik";
 import ToDodataService from "../../api/todo/ToDodataService";
 import AuthenticationService from "./AuthenticationService";
+
+
+const MyField = (props) => {
+    const {
+        values: { value, quantity },
+        touched: {quantity: quantity1, value: value1},
+        setFieldValue,
+    } = useFormikContext();
+    const [field, meta] = useField(props);
+
+    React.useEffect(() => {
+        // set the value of textC, based on textA and textB
+        if (
+            value!== 0 &&
+            quantity!== 0 &&
+            value1 &&
+            quantity1
+        ) {
+            setFieldValue(props.name, value*quantity);
+        }
+    }, [value, quantity, value1, quantity1, setFieldValue, props.name]);
+
+    return (
+        <>
+            <input {...props} {...field} />
+            {!!meta.touched && !!meta.error && <div>{meta.error}</div>}
+        </>
+    );
+};
+
+
 class TodoComponent extends Component {
 
     constructor(props) {
@@ -10,8 +40,10 @@ class TodoComponent extends Component {
 
         this.state = {
             id: this.props.params.id,
-            description: 'Learn forms',
-            targetdate: moment(new Date()).format('YYYY-MM-DD')
+            description: '',
+            value: '',
+            quantity:'',
+            amount: 0
         }
         this.handleOnSubmit = this.handleOnSubmit.bind(this)
         this.checkValidation = this.checkValidation.bind(this)
@@ -26,30 +58,45 @@ class TodoComponent extends Component {
             errors.description = 'Enter atleast 5 characters'
         }
 
-        if(!moment(values.targetdate).isValid()){
-            errors.targetdate = 'Enter a valid'
+        if(values.value<=0){
+            errors.value = 'Enter a valid'
         }
         // console.log(values)
         return errors
     }
-
+    // addTodo(values){
+    //     console.log(values)
+    //     let username = AuthenticationService.getLoggedInUsername()
+    //     ToDodataService.createToDo(username,{
+    //         username: username,
+    //         description: values.description,
+    //         value: values.value,
+    //         quantity: values.quantity,
+    //         amount: values.amount
+    //     }).then( () => alert("reached add todo"))
+    // }
     handleOnSubmit(values){
-        //console.log(values)
+        console.log(values)
         let username = AuthenticationService.getLoggedInUsername()
-
-        if(this.state.id === -1){
+        alert(this.props.params.id)
+        if(this.props.params.id === -1){
+            console.log("reached")
             ToDodataService.createToDo(username,{
-                id: this.state.id,
+                username: username,
                 description: values.description,
-                targetdate: values.targetdate
-            }).then( () => this.props.navigate('/todos'))
+                value: values.value,
+                quantity: values.quantity,
+                amount: values.amount
+            }).then( () => this.props.navigate("/todos"))
         }
         else{
             ToDodataService.updateToDo(username,this.state.id,{
                 id: this.state.id,
                 description: values.description,
-                targetdate: values.targetdate
-            }).then( () => this.props.navigate('/todos'))
+                value: values.value,
+                quantity: values.quantity,
+                amount: values.amount
+            }).then( () => this.props.navigate("/todos") )
         }
     }
 
@@ -63,26 +110,33 @@ class TodoComponent extends Component {
         ToDodataService.retrieveToDo(username,this.state.id)
             .then(response => this.setState({
                 description: response.data.description,
-                targetdate: response.data.targetdate
+                value: response.data.value,
+                quantity: response.data.quantity,
+                amount: response.data.amount
             }))
     }
 
     render() {
+
         // let description = this.state.description
         // let targetdate = this.state.targetdate
         return (
             <div>
-                <h1>To DO</h1>
+                <h1>Add New Bills</h1>
                 <div className="container">
                    <Formik
                        initialValues={{
                            //one parenthisis indicates javascripts and other indicates object
                            //key:value
                            description : this.state.description,
-                           targetdate: this.state.targetdate
+                           value: this.state.value,
+                           quantity: this.state.quantity,
+                           amount: this.state.amount
                        }}
+                       validateOnChange={this.onChange}
                        validate={this.checkValidation}
                        onSubmit={this.handleOnSubmit}
+
                        enableReinitialize={true}
                    >
                        {
@@ -91,14 +145,18 @@ class TodoComponent extends Component {
                                    <ErrorMessage name="description" component="div" className="alert alert-warning"/>
                                    <ErrorMessage name="targetdate" component="div" className="alert alert-warning"/>
                                    <fieldset className="form-group">
-                                       <label>Description</label>
-                                       <Field className="form-control" type="text" name="description"/>
+                                       <Field className="form-control" type="text" placeholder="Item Name" name="description"/>
                                    </fieldset>
                                    <fieldset className="form-group">
-                                       <label>Target Date</label>
-                                       <Field className="form-control" type="date" name="targetdate"/>
+                                       <Field className="form-control" type="text" placeholder="Value" name="value"/>
                                    </fieldset>
-                                   <button className="btn btn-success" type="submit">Save</button>
+                                   <fieldset className="form-group">
+                                       <Field className="form-control" type="text" placeholder="Quantity" name="quantity"/>
+                                   </fieldset>
+                                   <fieldset className="form-group">
+                                       <MyField className="form-control" type="text" placeholder="Amount" name="amount"/>
+                                   </fieldset>
+                                   <button className="btn btn-success" type="button">Save</button>
                                </Form>
                            )
                        }
