@@ -1,0 +1,44 @@
+version: '3.5'
+services:
+
+
+
+  reactJS:
+    image: "reactimage"
+    ports:
+      - "3000:3000"
+    container_name: react-js-container
+    command: npm start
+
+  mydb:
+    image: "mysql:latest"
+    ports:
+      - "3306:3306"
+    container_name: database_container
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=invoiceDatabase
+      - MYSQL_USER=prashant
+      - MYSQL_PASSWORD=password
+
+
+  springboot:
+    image: "web-service"
+    ports:
+      - "8081:8081"
+    container_name: springboot_container_sql1
+#    restart: on-failure
+    environment:
+      - MYSQL_HOST=mydb
+      - MYSQL_PORT=3306
+    depends_on:
+      - mydb
+
+
+
+
+
+
+
+
+

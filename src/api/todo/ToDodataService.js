@@ -31,6 +31,12 @@ class ToDodataService{
         return axios.post(`http://localhost:8081/jpa/users/${name}/todos/`, todo);
     }
 
+    checkLoginStatus = async(username, password)=>{
+    const res = await axios.get(`http://localhost:8081/users/logincheck/${username}/${password}`);
+    return res;
+    }
+
+
 }
 
 export default new ToDodataService()

@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import AuthenticationService from "./AuthenticationService";
-import '/home/prashant/invoice/src/login.css';
+import '../../login.css';
 import {Link} from "react-router-dom";
+import ToDodataService from "../../api/todo/ToDodataService";
 
 class LoginComponent extends Component {
 
@@ -9,7 +10,7 @@ class LoginComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: 'prashant',
+            username: '',
             password: '',
             hasLoginFailed: false,
             showSuccessMessage: false
@@ -42,20 +43,42 @@ class LoginComponent extends Component {
     // }
 
     loginClick(){
-        if(this.state.username === 'prashant.sharma@iiitb.ac.in' && this.state.password === 'dummy'){
-            console.log('Successful')
-            AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
-            this.props.navigate(`/welcome/${this.state.username}`)
-            this.setState({showSuccessMessage: true,
-                hasLoginFailed: false})
-        }
-        else{
-            console.log('failed')
-            this.setState({
-                showSuccessMessage: false,
-                hasLoginFailed: true
-            })
-        }
+
+        ToDodataService.checkLoginStatus(this.state.username, this.state.password).then(
+            (response) => {
+                if(response.data === false){
+                    alert('Wrong username and password. Try Again');
+                    this.setState({
+                                showSuccessMessage: false,
+                                hasLoginFailed: true
+                            })
+                }
+                else{
+                    alert('Login Details Correct')
+                    this.props.navigate(`/welcome/${this.state.username}`)
+                    // console.log(user_id)
+                    AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password);
+                    this.setState({showSuccessMessage: true,
+                                hasLoginFailed: false})
+                }
+
+            }
+        )
+
+        // if(this.state.username === 'prashant.sharma@iiitb.ac.in' && this.state.password === 'dummy'){
+        //     console.log('Successful')
+        //     AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
+        //     this.props.navigate(`/welcome/${this.state.username}`)
+        //     this.setState({showSuccessMessage: true,
+        //         hasLoginFailed: false})
+        // }
+        // else{
+        //     console.log('failed')
+        //     this.setState({
+        //         showSuccessMessage: false,
+        //         hasLoginFailed: true
+        //     })
+        // }
 
         // console.log(this.state)
     }

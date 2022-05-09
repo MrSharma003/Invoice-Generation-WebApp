@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import '/home/prashant/invoice/src/Signup.css'
+import '../../Signup.css'
 import ToDodataService from "../../api/todo/ToDodataService";
 // import '/home/prashant/invoice/src/images'
 
@@ -38,7 +38,7 @@ class SignupComponent extends Component {
             password: this.state.password
         }).then(
             (response) => {
-                // alert(response.data);
+                alert(response.data);
                 alert('Registered Successfully')
                 this.props.navigate('/login')
                 // console.log("Reached here")
