@@ -1,6 +1,6 @@
 ---
 - name: run containers
-  hosts: docker
+  hosts: ubuntu18
   become: true
 
   tasks:
