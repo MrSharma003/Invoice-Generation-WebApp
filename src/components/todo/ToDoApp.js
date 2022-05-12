@@ -61,7 +61,7 @@ class ToDoApp extends Component {
                                 </AuthenticatedRoute>}/>
 
                     </Routes>
-                    {/*<FooterComponent/>*/}
+                    <FooterComponent/>
                 </Router>
                 {/*<LoginComponent/>*/}
                 {/*<WelCome/>*/}

@@ -17,15 +17,14 @@ class WelCome extends Component {
             <>
                 <h1>Welcome!</h1>
                 <div className="container">
-                    Welcome {this.props.params.name}. You can manage your todos <Link to="/todos">here</Link>
+                    Welcome {this.props.params.name}. You can manage your payments <Link to="/todos">here</Link>
                 </div>
-                <div className="container">
-                    Click her to get a customised welcome message.
-                    <button onClick={this.retrieveWelcomeMessage} className="btn btn-success">Get Welcome Message</button>
-                </div>
-                <div className="container">
-                   <h1> Message:  {this.state.welcomeMessage}</h1>
-                </div>
+                {/*<div className="container">*/}
+                {/*    <button onClick={this.retrieveWelcomeMessage} className="btn btn-success">Get Welcome Message</button>*/}
+                {/*</div>*/}
+                {/*<div className="container">*/}
+                {/*   <h1> Message:  {this.state.welcomeMessage}</h1>*/}
+                {/*</div>*/}
             </>
         );
     }
