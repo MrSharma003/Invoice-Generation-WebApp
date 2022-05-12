@@ -3,6 +3,11 @@ import ToDodataService from "../../api/todo/ToDodataService";
 import AuthenticationService from "./AuthenticationService";
 import {resetFirstInputPolyfill} from "web-vitals/dist/modules/lib/polyfills/firstInputPolyfill";
 import {useParams} from "react-router-dom";
+import StripeCheckout from "react-stripe-checkout";
+import axios from "axios";
+
+
+
 
 class ListTodoComponent extends Component {
 
@@ -18,6 +23,7 @@ class ListTodoComponent extends Component {
         this.addTodoClicked = this.addTodoClicked.bind(this)
         this.refreshTodos = this.refreshTodos.bind(this);
         this.getTotal = this.getTotal.bind(this);
+        this.onToken = this.onToken.bind(this);
     }
 
     componentDidMount() {
@@ -51,8 +57,8 @@ class ListTodoComponent extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log('shouldComponentUpdate')
-        console.log(nextProps)
-        console.log(nextState)
+        // console.log(nextProps)
+        // console.log(nextState)
         return true
     }
 
@@ -75,6 +81,23 @@ class ListTodoComponent extends Component {
             total = rowTotals.reduce((acc, val) => acc + val);
         }
         return total;
+    }
+
+
+    onToken = (token) => {
+        console.log(token)
+        axios.post("http://localhost:8081/jpa/users/payment/charge","",{
+            headers: {
+                token: token.id,
+                amount : this.getTotal()*100
+            },
+        })
+            .then(() => {
+                alert('payment successful')
+            })
+            .catch(()=>{
+                alert('Payment failed')
+            })
     }
 
     render() {
@@ -132,6 +155,18 @@ class ListTodoComponent extends Component {
                                 </div>
                                 <div>
                                     <h4>Total Amount: {this.getTotal()} </h4>
+                                </div>
+                                <div>
+                                    <StripeCheckout amount={this.getTotal()*100}
+                                                    label="Pay Now"
+                                                    name="Billing"
+                                                    billingAddress
+                                                    shippingAddress
+                                                    // description={Your total is ${price}}
+                                                        panelLabel="Pay Now"
+                                                        token={this.onToken}
+                                                        stripeKey="pk_test_51KyWA6SElEIcYj8icDnFOds8yoTtZGDVNcyabc0R1bjcc7V6J5XXU6Bx6Xhko7rtV4OUTnQTfwdwPpg1YZl095Nr00gww3lO9o"
+                                                        currency="USD"/>
                                 </div>
                             </div>
                         </div>

@@ -46,24 +46,24 @@ class TodoComponent extends Component {
             amount: 0
         }
         this.handleOnSubmit = this.handleOnSubmit.bind(this)
-        this.checkValidation = this.checkValidation.bind(this)
+        // this.checkValidation = this.checkValidation.bind(this)
     }
 
-    checkValidation(values){
-        let errors = {}
-        if(!values.description){
-            errors.description = 'Enter a Description'
-        }
-        else if(values.description.length<5){
-            errors.description = 'Enter atleast 5 characters'
-        }
-
-        if(values.value<=0){
-            errors.value = 'Enter a valid'
-        }
-        // console.log(values)
-        return errors
-    }
+    // checkValidation(values){
+    //     let errors = {}
+    //     if(!values.description){
+    //         errors.description = 'Enter a Description'
+    //     }
+    //     else if(values.description.length<5){
+    //         errors.description = 'Enter atleast 5 characters'
+    //     }
+    //
+    //     if(values.value<=0){
+    //         errors.value = 'Enter a valid'
+    //     }
+    //     // console.log(values)
+    //     return errors
+    // }
     // addTodo(values){
     //     console.log(values)
     //     let username = AuthenticationService.getLoggedInUsername()
@@ -75,11 +75,14 @@ class TodoComponent extends Component {
     //         amount: values.amount
     //     }).then( () => alert("reached add todo"))
     // }
+
+
     handleOnSubmit(values){
-        console.log(values)
+        console.log("Hi")
         let username = AuthenticationService.getLoggedInUsername()
+        console.log(username)
         alert(this.props.params.id)
-        if(this.props.params.id === -1){
+        if(this.props.params.id == -1){
             console.log("reached")
             ToDodataService.createToDo(username,{
                 username: username,
@@ -87,9 +90,10 @@ class TodoComponent extends Component {
                 value: values.value,
                 quantity: values.quantity,
                 amount: values.amount
-            }).then( () => this.props.navigate("/todos"))
+            }).then( () => window.location.href="/todos")
         }
         else{
+            console.log("reached else")
             ToDodataService.updateToDo(username,this.state.id,{
                 id: this.state.id,
                 description: values.description,
@@ -107,6 +111,7 @@ class TodoComponent extends Component {
         }
 
         let username = AuthenticationService.getLoggedInUsername()
+
         ToDodataService.retrieveToDo(username,this.state.id)
             .then(response => this.setState({
                 description: response.data.description,
@@ -120,6 +125,7 @@ class TodoComponent extends Component {
 
         // let description = this.state.description
         // let targetdate = this.state.targetdate
+        let {description, value, quantity, amount} = this.state
         return (
             <div>
                 <h1>Add New Bills</h1>
@@ -128,22 +134,18 @@ class TodoComponent extends Component {
                        initialValues={{
                            //one parenthisis indicates javascripts and other indicates object
                            //key:value
-                           description : this.state.description,
-                           value: this.state.value,
-                           quantity: this.state.quantity,
-                           amount: this.state.amount
+                           description, value, quantity, amount
                        }}
                        validateOnChange={this.onChange}
                        validate={this.checkValidation}
                        onSubmit={this.handleOnSubmit}
-
                        enableReinitialize={true}
                    >
                        {
                            (props) => (
                                <Form>
                                    <ErrorMessage name="description" component="div" className="alert alert-warning"/>
-                                   <ErrorMessage name="targetdate" component="div" className="alert alert-warning"/>
+                                   <ErrorMessage name="amount" component="div" className="alert alert-warning"/>
                                    <fieldset className="form-group">
                                        <Field className="form-control" type="text" placeholder="Item Name" name="description"/>
                                    </fieldset>
@@ -156,7 +158,7 @@ class TodoComponent extends Component {
                                    <fieldset className="form-group">
                                        <MyField className="form-control" type="text" placeholder="Amount" name="amount"/>
                                    </fieldset>
-                                   <button className="btn btn-success" type="button">Save</button>
+                                   <button className="btn btn-success" type="submit">Save</button>
                                </Form>
                            )
                        }

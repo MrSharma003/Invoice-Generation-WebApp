@@ -127,7 +127,7 @@ class LoginComponent extends Component {
                                                    className="form-control form-control-lg"
                                                    placeholder="Enter a valid email address" value={this.state.username}
                                                    onChange={this.handleChange}/>
-                                            <label className="form-label" htmlFor="form3Example3">Email address</label>
+                                            {/*<label className="form-label" htmlFor="form3Example3">Email address</label>*/}
                                         </div>
 
 
@@ -136,16 +136,16 @@ class LoginComponent extends Component {
                                                    className="form-control form-control-lg"
                                                    placeholder="Enter password" value={this.state.password}
                                                    onChange={this.handleChange}/>
-                                            <label className="form-label" htmlFor="form3Example4">Password</label>
+                                            {/*<label className="form-label" htmlFor="form3Example4">Password</label>*/}
                                         </div>
 
                                         <div className="d-flex justify-content-between align-items-center">
                                             <div className="form-check mb-0">
                                                 <input className="form-check-input me-2" type="checkbox" value=""
                                                        id="form2Example3"/>
-                                                <label className="form-check-label" htmlFor="form2Example3">
-                                                    Remember me
-                                                </label>
+                                                {/*<label className="form-check-label" htmlFor="form2Example3">*/}
+                                                {/*    Remember me*/}
+                                                {/*</label>*/}
                                             </div>
                                             <a href="#!" className="text-body">Forgot password?</a>
                                         </div>

@@ -15,7 +15,7 @@ class ToDodataService{
     }
 
     retrieveToDo(name, id){
-        return axios.get(`http://localhost:8081/jap/users/${name}/todos/${id}`);
+        return axios.get(`http://localhost:8081/jpa/users/${name}/todos/${id}`);
         //console.log('hello world');
     }
 
